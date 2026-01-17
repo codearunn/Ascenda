@@ -39,6 +39,31 @@ Ascenda aims to solve this by combining **goal tracking**, **progress visualizat
 
 ---
 
+## Status
+- **Backend:** Auth, JWT token generation, and basic user endpoints implemented with MongoDB.
+- **Frontend:** Not implemented yet. Planned React dashboard for habits, streaks, and life stats.
+
+---
+
+## Getting Started
+
+### Backend setup
+1. From the project root, install backend dependencies:
+   - `cd backend && npm install`
+2. Create a `.env` file inside `backend/` with at least:
+   - `MONGO_URI=<your MongoDB connection string>`
+   - `JWT_SECRET=<a strong random string>`
+   - (optional) `PORT=8000`
+3. Start the backend server in development mode:
+   - `cd backend && npm run dev`
+4. The API will be available at `http://localhost:8000`.
+   - Example endpoints:
+     - `POST /api/user/signup`
+     - `POST /api/user/login`
+     - `GET /api/user/me` (requires JWT token)
+
+---
+
 ## Project Structure
 ```text
 ascenda/
@@ -46,3 +71,9 @@ ascenda/
 ├── frontend/
 ├── README.md
 └── .gitignore
+```
+
+---
+
+## Interview Line
+“I built a gamified self-growth platform inspired by Gen‑Z behavior – think Duolingo + habit tracker + life stats.”
