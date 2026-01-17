@@ -86,7 +86,7 @@ async function HandelUserlogin(req, res) {
     console.log("Error in HandelUserlogin", error);
     return res.status(500).json({
       status:false,
-      message:"Internal Server erorr",
+      message:"Internal Server error",
     });
   }
 };
