@@ -12,6 +12,14 @@ connectionToDB(mongoURI)
   .catch((e) => console.log(e));
 
 //Middlewares
+
+const cors = require('cors');
+const FRONTEND_URI= "http://localhost:5175";
+app.use(cors({
+  origin:FRONTEND_URI,
+  credentials:true,
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
