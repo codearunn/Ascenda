@@ -22,7 +22,7 @@ function Login(){
         method:"POST",
         credentials: "include",
         headers:{
-          "content-Type":"application/json",
+          "Content-Type":"application/json",
         },
         body:JSON.stringify({
           email,
@@ -77,7 +77,7 @@ function Login(){
             <label className="block text-sm font-medium mb-1">Password</label>
             <input
               id="password"
-              type="text"
+              type="password"
               placeholder="******"
               value={password}
               className="w-full rounded-md bg-slate-900 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"

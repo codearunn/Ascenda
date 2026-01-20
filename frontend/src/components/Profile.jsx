@@ -1,0 +1,84 @@
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useNavigate } from "react-router-dom";
+
+export default function Profile() {
+  const navigate = useNavigate();
+
+  async function handelLogout(e) {
+    e.preventDefault();
+
+    try {
+      await fetch("http://localhost:8000/api/user/logout", {
+        method:"POST",
+        credentials:"include",
+      });
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }finally{
+      localStorage.removeItem("isLoggedIn");
+      navigate("/login");
+    }
+  }
+  return (
+    <Menu as="div" className="relative inline-block ml-5">
+      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-slate-900">
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          <img
+            src="../public/images/default.png"
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <ChevronDownIcon
+          aria-hidden="true"
+          className="-mr-1 size-5 text-gray-400"
+        />
+      </MenuButton>
+
+      <MenuItems
+        transition
+        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+      >
+        <div className="py-1">
+          <MenuItem>
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+            >
+              Profile
+            </a>
+          </MenuItem>
+          <MenuItem>
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+            >
+              Support
+            </a>
+          </MenuItem>
+          <MenuItem>
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-300 data-focus:bg-white/5 data-focus:text-white data-focus:outline-hidden"
+            >
+              License
+            </a>
+          </MenuItem>
+            <MenuItem>
+              {() => (
+                <button
+                  type="button"
+                  onClick={handelLogout}
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                >
+                  Sign out
+                </button>
+              )}
+            </MenuItem>
+        </div>
+      </MenuItems>
+    </Menu>
+  )
+}

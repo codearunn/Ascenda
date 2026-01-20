@@ -22,7 +22,7 @@ export default function Signup(){
       method:"POST",
       credentials: "include", //MUST for Cookies
       headers:{
-        "content-Type": "application/json", //Headers
+        "Content-Type": "application/json", //Headers
       },
       body:JSON.stringify({
         name,
@@ -93,7 +93,7 @@ export default function Signup(){
             <label className="block text-sm font-medium mb-1">Password</label>
             <input
               id="password"
-              type="text"
+              type="password"
               placeholder="******"
               value={password}
               className="w-full rounded-md bg-slate-900 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"

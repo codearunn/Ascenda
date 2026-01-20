@@ -91,6 +91,28 @@ async function HandelUserlogin(req, res) {
   }
 };
 
+async function HandelUserLogout(req, res) {
+  try {
+    // Clear the token cookie
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false, // set true in production with HTTPS
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Error in HandelUserLogout:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
 async function getCurrentUser(req, res) {
   try {
     const user= await User.findById(req.user.id).select("-password");
@@ -120,4 +142,5 @@ module.exports= {
   HandelUserSignup,
   HandelUserlogin,
   getCurrentUser,
+  HandelUserLogout
 }
