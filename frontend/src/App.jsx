@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/protectedRoute";
+import AddGoals from "./components/AddGoals";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route element={<ProtectedRoute/>}>
         {/* All routes here require isLoggedIn === true */}
         <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/addGoals" element={<AddGoals/>} />
       </Route>
     </Routes>
     </div>

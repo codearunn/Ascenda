@@ -25,9 +25,10 @@ app.use(cookieParser());
 
 //ROUTES
 const userRoute= require("./routes/user");
+const goalRoute= require("./routes/goal");
 
 app.use("/api/user", userRoute);
-
+app.use("/api/goals", goalRoute);
 
 
 app.listen(PORT, () => console.log(`Sever Started at PORT:${PORT}`));

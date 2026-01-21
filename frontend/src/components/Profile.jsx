@@ -25,7 +25,7 @@ export default function Profile() {
       <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-slate-900">
         <div className="w-10 h-10 rounded-full overflow-hidden">
           <img
-            src="../public/images/default.png"
+            src="images/default.png"
             alt="Profile"
             className="w-full h-full object-cover"
           />

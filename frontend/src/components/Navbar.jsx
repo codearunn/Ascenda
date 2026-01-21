@@ -7,7 +7,7 @@ function Navbar(){
   return (
 
     <nav className="flex items-center justify-between py-4 border-b border-slate-800 bg-black font-serif px-4">
-      <Link to="/" className="text-3xl font-bold text-slate-100" >
+      <Link to="/" className="text-5xl font-bold text-red-500" >
         Ascenda
       </Link>
 

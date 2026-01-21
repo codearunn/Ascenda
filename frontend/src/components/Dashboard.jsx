@@ -1,7 +1,133 @@
+import  {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+
 export default function Dashboard() {
+  const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error,  setError] =useState("");
+
+  const [todayGoals, setTodayGoals] = useState([]);
+  const [goalsLoading, setGoalsLoading] = useState(false);
+  const [goalsError,  setGoalsError] =useState("");
+
+  const navigate= useNavigate();
+  function handelAddGoals(){
+    navigate("/addGoals");
+  }
+  useEffect(() => {
+
+    async function getGoals() {
+
+        setGoalsError("");
+        setGoalsLoading(true);
+
+        try {
+          const res= await fetch("http://localhost:8000/api/goals/today", {
+            method:"GET",
+            credentials:"include",
+          });
+
+          const data= await res.json();
+
+          if(!res.ok){
+            setGoalsError(data?.message || "failed to get Goals");
+            return;
+          }
+          setTodayGoals(data.data);
+        } catch (error) {
+          console.error("Error in fetching Goals", error);
+        } finally{
+          setGoalsLoading(false);
+        }
+    }
+    getGoals();
+  }, [])
+
+  useEffect(() => {
+
+    async function getUser() {
+
+      setError("");
+      setLoading(true);
+      try {
+        const res= await fetch("http://localhost:8000/api/user/me", {
+          method:"GET",
+          credentials:"include",
+        });
+        const data= await res.json();
+        console.log(data);
+        if(!res.ok){
+          setError(data?.message || "failed to find User")
+          return;
+        }
+
+        setUser(data.data);
+      } catch (error) {
+        console.error("Error in fetching User", error);
+      }finally{
+        setLoading(false);
+      }
+    }
+    getUser();
+
+  }, [])
+
+  if(loading){
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100">
+        <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+            <div role="status" className="max-w-sm animate-pulse">
+                <div className="h-2.5 bg-slate-800 rounded-full w-[100px] mb-4"></div>
+                <div className="h-2 bg-slate-800 rounded-full max-w-[360px] mb-2.5"></div>
+                <div className="h-2 bg-slate-800 rounded-full mb-2.5"></div>
+                <div className="h-2 bg-slate-800 rounded-full max-w-[330px] mb-2.5"></div>
+                <div className="h-2 bg-slate-800 rounded-full max-w-[300px] mb-2.5"></div>
+                <div className="h-2 bg-slate-800 rounded-full max-w-[360px]"></div>
+                <span className="sr-only">Loading...</span>
+            </div>
+          </main>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+        {/* {AddGoals} */}
+        <section className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900/80 via-slate-900 to-slate-950 px-6 py-5 shadow-lg shadow-slate-950/40">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight">
+                <span className="text-emerald-400">Got Something in Mind!?</span>
+              </h1>
+              <p className="mt-2 text-sm text-slate-100 max-w-xl">
+               Change Your Goals Here!
+              </p>
+
+              <button onClick={handelAddGoals} className="mt-3 text-white bg-red-700 p-2 text-md rounded-md shadow-xl hover:bg-slate-600">
+                Add Goal
+            </button>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="hidden md:block text-right">
+                <p className="text-xs uppercase tracking-wide text-slate-400">
+                  Current streak
+                </p>
+                <p className="mt-1 text-3xl font-semibold text-emerald-400">
+                  4 days
+                </p>
+                <p className="text-xs text-slate-500">
+                  Longest: <span className="text-slate-300">7 days</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        {(error || goalsError) && (
+          <p className="mb-3 text-sm text-red-400"> Something went wrong. Please try again. </p>
+        )}
+
         {/* Top welcome panel */}
         <section className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900/80 via-slate-900 to-slate-950 px-6 py-5 shadow-lg shadow-slate-950/40">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -10,7 +136,7 @@ export default function Dashboard() {
                 Today
               </p>
               <h1 className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight">
-                Good to see you back, <span className="text-emerald-400">Arun</span>
+                Good to see you back, <span className="text-emerald-400">{user?.name || "there"}</span>
               </h1>
               <p className="mt-2 text-sm text-slate-400 max-w-xl">
                 You’re one step closer to building a consistent routine. Focus on the
@@ -90,8 +216,25 @@ export default function Dashboard() {
         </section>
 
         {/* Main content */}
+        {goalsLoading &&(
+          <div className="min-h-screen bg-slate-950 text-slate-100">
+            <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+                <div role="status" className="max-w-sm animate-pulse">
+                    <div className="h-2.5 bg-slate-800 rounded-full w-[100px] mb-4"></div>
+                    <div className="h-2 bg-slate-800 rounded-full max-w-[360px] mb-2.5"></div>
+                    <div className="h-2 bg-slate-800 rounded-full mb-2.5"></div>
+                    <div className="h-2 bg-slate-800 rounded-full max-w-[330px] mb-2.5"></div>
+                    <div className="h-2 bg-slate-800 rounded-full max-w-[300px] mb-2.5"></div>
+                    <div className="h-2 bg-slate-800 rounded-full max-w-[360px]"></div>
+                    <span className="sr-only">Loading...</span>
+                </div>
+              </main>
+          </div>
+        )}
+
         <section className="grid gap-6 md:grid-cols-[2fr,1.3fr]">
           {/* Left: today’s plan */}
+          {!goalsLoading && (
           <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-medium text-slate-200">
@@ -115,22 +258,24 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
-
-              <div className="flex gap-3">
-                <div className="flex flex-col items-center">
-                  <div className="h-2 w-2 rounded-full bg-sky-400" />
-                  <div className="mt-1 h-full w-px bg-slate-700" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-slate-100">
-                    Deep work session
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    60 minutes on your top priority task.
-                  </p>
-                </div>
-              </div>
-
+              {
+                todayGoals.map(goal =>(
+                  <div key={goal._id}  className="flex gap-3">
+                    <div className="flex flex-col items-center">
+                      <div className="h-2 w-2 rounded-full bg-sky-400" />
+                      <div className="mt-1 h-full w-px bg-slate-700" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-slate-100">
+                        {goal.title}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {goal.description}
+                      </p>
+                    </div>
+                  </div>
+                  ))
+              }
               <div className="flex gap-3">
                 <div className="flex flex-col items-center">
                   <div className="h-2 w-2 rounded-full bg-violet-400" />
@@ -146,7 +291,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-
+          )}
           {/* Right: habits overview */}
           <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
             <h2 className="text-sm font-medium text-slate-200">
