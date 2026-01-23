@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, Target } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function AddGoals() {
   const [title, setTitle] = useState('');
@@ -40,22 +41,32 @@ function AddGoals() {
     }, 500);
   };
 
+  const navigate= useNavigate();
+  function navigateToDashbard() {
+    navigate("/dashboard");
+  }
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-start justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6 pt-16">
+    <div className="flex min-h-[calc(100vh-10rem)]
+        items-start justify-center
+        bg-[url('/images/zoroCover.webp')]
+        bg-cover bg-center bg-no-repeat
+        from-slate-950/80 via-slate-900/80 to-slate-950/80
+        p-6 pt-16">
       <div className="w-full max-w-2xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="bg-white/40 m-0 mb-2 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-8 shadow-2xl">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
               <Target className="w-5 h-5 text-red-600" />
             </div>
-            <h1 className="text-3xl font-semibold text-slate-100">Create a new goal</h1>
+            <h1 className="text-5xl font-extrabold text-black rounded-5xl p-4">Create a new goal</h1>
+            <button onClick={navigateToDashbard} className=" bg-black text-red-900 pl-2 pr-2 pt-1 pb-1 rounded-3xl shadow-xl hover:bg-zinc-900 hover:text-red-500">view Taks</button>
           </div>
-          <p className="text-slate-400 text-sm ml-14">Set your intention and make it happen</p>
+          <label className="text-black font-extrabold  text-sm ml-14 rounded-xl p-2">Set your intention and make it happen</label>
         </div>
 
         {/* Form Card */}
-        <div className="bg-slate-900/40 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-8 shadow-2xl">
+        <div className="bg-slate-900/90 backdrop-blur-sm border border-slate-800/50 rounded-2xl p-8 shadow-2xl">
           <form onSubmit={handleAddGoal} className="space-y-6">
             {/* Title Input */}
             <div className="space-y-2">
@@ -100,7 +111,7 @@ function AddGoals() {
             <div className="space-y-2">
               <label htmlFor="description" className="block text-sm font-medium text-slate-300">
                 Description
-                <span className="text-slate-500 font-normal ml-1">(optional)</span>
+                <span className="text-slate-500 font-normal ml-1">(required)</span>
               </label>
               <textarea
                 id="description"

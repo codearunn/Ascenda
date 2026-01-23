@@ -14,7 +14,7 @@ connectionToDB(mongoURI)
 //Middlewares
 
 const cors = require('cors');
-const FRONTEND_URI= "http://localhost:5175";
+const FRONTEND_URI= "http://localhost:5173";
 app.use(cors({
   origin:FRONTEND_URI,
   credentials:true,

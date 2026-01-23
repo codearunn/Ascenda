@@ -51,6 +51,9 @@ Ascenda aims to solve this by combining **goal tracking**, **progress visualizat
   - `POST /api/user/logout` (clears auth cookie)
 - ✅ JWT token generation stored in an HTTP-only cookie
 - ✅ `requireAuth` middleware to protect `/me` and other private routes
+- ✅ `PATCH /api/goals/:id/toggle` - Toggle goal completion
+- ✅ `DELETE /api/goals/:id` - Delete a goal
+- ✅ `GET /api/goals/stats` - Get user's goal statistics
 
 ### Frontend
 - ✅ React + Vite + Tailwind CSS
@@ -71,6 +74,10 @@ Ascenda aims to solve this by combining **goal tracking**, **progress visualizat
   - Stats row (today’s goals, weekly progress, focus score)
   - “Today’s plan” timeline section
   - “Habits overview” with simple progress bars
+- ✅ Goal completion toggle with checkboxes
+- ✅ Goal deletion with confirmation
+- ✅ Dynamic dashboard stats from real data
+- ✅ Visual feedback for completed goals
 
 > Note: Dashboard numbers and goals are currently static placeholders. They will be wired to real data (e.g. `/goals` endpoints) in future iterations.
 

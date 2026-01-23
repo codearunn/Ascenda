@@ -3,7 +3,7 @@ const secret= process.env.JWT_SECRET;
 
 function createTokenForUser(user) {
   const payload={
-    id:user.id,
+    id:user._id,
     name:user.name,
     email:user.email,
   }
