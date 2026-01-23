@@ -95,6 +95,9 @@ export default function Dashboard() {
       setTodayGoals(prev =>
         prev.map(g => g._id===goalId? {...g, completed:!g.completed} :g)
       );
+
+      // Refresh stats after toggling goal completion
+      getStats();
     } catch (error) {
       console.error("Error in handleCheckBox",error);
     }
@@ -125,26 +128,26 @@ export default function Dashboard() {
 
   const [stats, setStats] = useState([]);
 
-  useEffect(() => {
-
-    async function getStats() {
-      try {
-        const res= await fetch("http://localhost:8000/api/goals/stats",{
-          method:"GET",
-          credentials:"include",
-        });
-        const data= await res.json();
-        if(!res.ok){
-          setError(data?.message || "failed to get stats");
-          return;
-        }
-        console.log("STATS RESPONSE 👉", data);
-        setStats(data.data);
-      } catch (error) {
-         console.error("Error in fetching User", error);
-         return;
+  async function getStats() {
+    try {
+      const res= await fetch("http://localhost:8000/api/goals/stats",{
+        method:"GET",
+        credentials:"include",
+      });
+      const data= await res.json();
+      if(!res.ok){
+        setError(data?.message || "failed to get stats");
+        return;
       }
+      console.log("STATS RESPONSE 👉", data);
+      setStats(data.data);
+    } catch (error) {
+       console.error("Error in fetching User", error);
+       return;
     }
+  }
+
+  useEffect(() => {
     getStats();
   }, [])
 
@@ -221,10 +224,10 @@ export default function Dashboard() {
                   Current streak
                 </p>
                 <p className="mt-1 text-3xl font-semibold text-emerald-400">
-                  4 days
+                  {stats?.streak?.current || 0} days
                 </p>
                 <p className="text-xs text-slate-500">
-                  Longest: <span className="text-slate-300">7 days</span>
+                  Longest: <span className="text-slate-300">{stats?.streak?.longest || 0} days</span>
                 </p>
               </div>
             </div>
@@ -275,9 +278,9 @@ export default function Dashboard() {
               Focus score
             </p>
             <div className="mt-2 flex items-center justify-between pl-3 pr-1">
-              <p className="text-3xl font-semibold">7.8</p>
+              <p className="text-3xl font-semibold">{stats?.focusScore?.score || 0}</p>
               <span className="text-xs rounded-full bg-violet-500/10 px-2 py-1 text-violet-300 border border-violet-500/30">
-                Stable
+                {stats?.focusScore?.status || "Calculating"}
               </span>
             </div>
             <p className="mt-1 text-xs text-slate-500 pl-3">
@@ -356,38 +359,55 @@ export default function Dashboard() {
                     <span className="h-2 w-2 rounded-full bg-emerald-400" />
                     Consistency
                   </span>
-                  <span className="text-slate-200 font-medium">78%</span>
+                  <span className="text-slate-200 font-medium">{stats?.habitsOverview?.consistency || 0}%</span>
                 </div>
                 <div className="mt-1 h-1.5 w-full rounded-full bg-slate-800">
-                  <div className="h-1.5 w-4/5 rounded-full bg-emerald-500" />
+                  <div 
+                    className="h-1.5 rounded-full bg-emerald-500" 
+                    style={{ width: `${stats?.habitsOverview?.consistency || 0}%` }}
+                  />
                 </div>
               </div>
 
-              {/* Focus blocks */}
+              {/* Active days */}
               <div>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-sky-400" />
-                    Focus blocks
+                    Active days
                   </span>
-                  <span className="text-slate-200 font-medium">5 / 7 days</span>
+                  <span className="text-slate-200 font-medium">
+                    {stats?.habitsOverview?.daysActive || 0} / {stats?.habitsOverview?.totalDays || 7} days
+                  </span>
                 </div>
                 <div className="mt-1 h-1.5 w-full rounded-full bg-slate-800">
-                  <div className="h-1.5 w-3/4 rounded-full bg-sky-500" />
+                  <div 
+                    className="h-1.5 rounded-full bg-sky-500" 
+                    style={{ 
+                      width: `${stats?.habitsOverview?.totalDays > 0 
+                        ? (stats.habitsOverview.daysActive / stats.habitsOverview.totalDays) * 100 
+                        : 0}%` 
+                    }}
+                  />
                 </div>
               </div>
 
-              {/* Movement */}
+              {/* Current streak */}
               <div>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-violet-400" />
-                    Movement
+                    Current streak
                   </span>
-                  <span className="text-slate-200 font-medium">4 / 7 days</span>
+                  <span className="text-slate-200 font-medium">{stats?.streak?.current || 0} days</span>
                 </div>
                 <div className="mt-1 h-1.5 w-full rounded-full bg-slate-800">
-                  <div className="h-1.5 w-2/3 rounded-full bg-violet-500" />
+                  <div 
+                    className="h-1.5 rounded-full bg-violet-500" 
+                    style={{ 
+                      width: `${Math.min((stats?.streak?.current || 0) / 7 * 100, 100)}%` 
+                    }}
+                  />
                 </div>
               </div>
             </div>
